@@ -3,1331 +3,214 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#006a4e">
-<title>আমার বাংলাদেশ — ৬৪ জেলা ট্রাভেল ট্র্যাকার</title>
-
-<link rel="preconnect" href="https://unpkg.com">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
+<meta name="theme-color" content="#087f5b">
+<title>আমার বাংলাদেশ — ৬৪ জেলার ট্রাভেল ট্র্যাকার</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800;900&display=swap');
 :root{
-  --green:#006a4e;
-  --green2:#0b8f68;
-  --red:#f42a41;
-  --ink:#102a22;
-  --muted:#6d7d77;
-  --bg:#f4f7f5;
-  --card:#fff;
-  --line:#e4ebe7;
-  --shadow:0 12px 35px rgba(16,42,34,.08);
+  --green:#087a5b;--green2:#0b8a68;--mint:#e5f3ed;--cream:#f7f4ed;
+  --ink:#17221f;--muted:#747b77;--line:#e6e3db;--white:#fff;
 }
-
 *{box-sizing:border-box}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:'Noto Sans Bengali',system-ui,sans-serif
-}
-
+html{scroll-behavior:smooth}
+body{margin:0;background:#f7f6f2;color:var(--ink);font-family:"Noto Sans Bengali",system-ui,sans-serif}
 button,input{font:inherit}
 button{cursor:pointer}
-
-.top{
-  background:linear-gradient(135deg,#005b43,#008b65);
-  color:#fff;
-  padding:18px 16px 22px;
-  position:sticky;
-  top:0;
-  z-index:1000;
-  box-shadow:0 5px 20px rgba(0,80,60,.18)
-}
-
-.topin{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px
-}
-
-.flag{font-size:31px}
-
-.brand h1{
-  font-size:21px;
-  margin:0;
-  font-weight:800
-}
-
-.brand p{
-  margin:2px 0 0;
-  font-size:12px;
-  opacity:.85
-}
-
-.reset{
-  border:1px solid rgba(255,255,255,.35);
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  border-radius:12px;
-  padding:8px 12px
-}
-
-.wrap{
-  max-width:1100px;
-  margin:auto;
-  padding:18px 14px 90px
-}
-
-.hero{
-  display:grid;
-  grid-template-columns:1.35fr .65fr;
-  gap:14px
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:22px;
-  box-shadow:var(--shadow)
-}
-
-.heroCard{padding:20px}
-
-.heroCard h2{
-  font-size:27px;
-  line-height:1.25;
-  margin:0 0 7px
-}
-
-.heroCard p{
-  color:var(--muted);
-  margin:0 0 17px
-}
-
-.search{
-  display:flex;
-  gap:8px;
-  background:#f4f7f5;
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:8px
-}
-
-.search input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:transparent;
-  padding:8px
-}
-
-.search button{
-  border:0;
-  background:var(--green);
-  color:#fff;
-  border-radius:11px;
-  padding:8px 14px
-}
-
-.stats{
-  padding:20px;
-  display:grid;
-  gap:13px
-}
-
-.statrow{
-  display:flex;
-  justify-content:space-between;
-  align-items:end
-}
-
-.big{
-  font-size:34px;
-  font-weight:800;
-  color:var(--green);
-  line-height:1
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted)
-}
-
-.progress{
-  height:11px;
-  background:#e9efec;
-  border-radius:99px;
-  overflow:hidden
-}
-
-.bar{
-  height:100%;
-  width:0;
-  background:linear-gradient(90deg,var(--green),#22b47e);
-  transition:.35s
-}
-
-.sectionTitle{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:24px 2px 10px
-}
-
-.sectionTitle h3{
-  margin:0;
-  font-size:18px
-}
-
-.sectionTitle span{
-  color:var(--muted);
-  font-size:12px
-}
-
-.mapCard{
-  overflow:hidden
-}
-
-#map{
-  height:570px;
-  width:100%;
-  background:#eaf1ee
-}
-
-.mapHelp{
-  padding:12px 15px;
-  color:var(--muted);
-  font-size:12px;
-  border-top:1px solid var(--line)
-}
-
-.detail{
-  margin-top:14px;
-  padding:20px;
-  display:none
-}
-
-.detail.show{display:block}
-
-.detailTop{
-  display:flex;
-  justify-content:space-between;
-  gap:10px
-}
-
-.detail h3{
-  font-size:25px;
-  margin:0 0 3px
-}
-
-.division{
-  color:var(--muted);
-  font-size:13px
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  flex-wrap:wrap
-}
-
-.action{
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:12px;
-  padding:9px 13px
-}
-
-.action.primary{
-  background:var(--green);
-  color:#fff;
-  border-color:var(--green)
-}
-
-.action.visited{
-  background:#e6f6f0;
-  color:var(--green);
-  border-color:#bce8d7
-}
-
-.infoGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:17px
-}
-
-.info{
-  background:#f7f9f8;
-  border-radius:14px;
-  padding:13px
-}
-
-.info b{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:4px
-}
-
-.info span{
-  font-size:14px;
-  font-weight:700
-}
-
-.results{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px
-}
-
-.result{
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:15px;
-  padding:13px;
-  text-align:left
-}
-
-.result:hover{
-  border-color:#8acbb6
-}
-
-.result b{
-  display:block
-}
-
-.result small{
-  color:var(--muted)
-}
-
-.empty{
-  color:var(--muted);
-  padding:15px;
-  text-align:center;
-  grid-column:1/-1
-}
-
-.downloads{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px
-}
-
-.dl{
-  border:0;
-  border-radius:15px;
-  padding:14px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-weight:700;
-  color:var(--ink)
-}
-
-.dl.primary{
-  background:var(--green);
-  color:#fff;
-  border-color:var(--green)
-}
-
-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:18px
-}
-
-.leaflet-control-attribution{
-  font-size:9px
-}
-
-.district-label{
-  background:transparent;
-  border:0;
-  box-shadow:none;
-  color:#23473c;
-  font-weight:700;
-  font-size:10px;
-  text-shadow:0 1px 2px #fff,0 -1px 2px #fff
-}
-
-@media(max-width:760px){
-
-  .hero{
-    grid-template-columns:1fr
-  }
-
-  .heroCard h2{
-    font-size:24px
-  }
-
-  #map{
-    height:470px
-  }
-
-  .results{
-    grid-template-columns:repeat(2,1fr)
-  }
-
-  .downloads{
-    grid-template-columns:1fr
-  }
-
-  .infoGrid{
-    grid-template-columns:1fr 1fr
-  }
-
-  .top{
-    padding-top:13px
-  }
-}
-
-@media(max-width:430px){
-
-  .wrap{
-    padding-left:10px;
-    padding-right:10px
-  }
-
-  .brand h1{
-    font-size:18px
-  }
-
-  .reset{
-    font-size:11px;
-    padding:7px 9px
-  }
-
-  #map{
-    height:430px
-  }
-
-  .infoGrid{
-    grid-template-columns:1fr
-  }
+.topbar{height:18px;background:var(--green)}
+.shell{max-width:760px;margin:auto;padding:18px 16px 42px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 18px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900;font-size:20px}
+.logo{width:48px;height:48px;border-radius:14px;background:var(--green);display:grid;place-items:center;box-shadow:0 8px 22px #087a5b25}
+.logo span{font-size:27px}
+.lang{border:1px solid var(--line);background:#fff;border-radius:28px;padding:12px 19px;font-weight:800;color:#26322f;box-shadow:0 3px 12px #00000008}
+.nav{background:#f0ede5;border-radius:28px;padding:7px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:22px}
+.nav button{border:0;background:transparent;border-radius:23px;padding:13px 7px;color:#777b77;font-weight:700}
+.nav button.active{background:#fff;color:#222;box-shadow:0 2px 10px #00000012}
+.hero{position:relative;overflow:hidden;border-radius:32px;min-height:510px;padding:44px 24px 30px;text-align:center;color:#fff;
+background:
+linear-gradient(180deg,#0b3d30aa,#062b22d9),
+radial-gradient(circle at 75% 15%,#68c7a244 0 10%,transparent 30%),
+linear-gradient(135deg,#185b49,#062c23 60%,#103f33);
+box-shadow:0 18px 40px #09382b22}
+.hero:before{content:"";position:absolute;inset:0;background:
+linear-gradient(120deg,transparent 35%,#ffffff08 35.5%,transparent 36%),
+radial-gradient(ellipse at 20% 85%,#52a88724,transparent 45%);pointer-events:none}
+.badge{position:relative;display:inline-block;background:#173f35cc;border:1px solid #ffffff25;border-radius:30px;padding:9px 18px;font-weight:800}
+.hero h1{position:relative;font-size:clamp(38px,9vw,64px);line-height:1.12;margin:28px 0 17px;font-weight:900;letter-spacing:-1px}
+.hero h1 .accent{color:#8ee1c1}
+.hero p{position:relative;max-width:600px;margin:0 auto;color:#e4eee9;font-size:17px;line-height:1.9}
+.cta{position:relative;margin:30px auto 24px;border:0;background:#fff;color:#1d2925;border-radius:40px;padding:16px 28px;font-size:18px;font-weight:900;box-shadow:0 10px 30px #0005}
+.live{position:relative;display:inline-flex;align-items:center;gap:9px;background:#1e3f36cc;border:1px solid #ffffff2b;border-radius:32px;padding:12px 20px;font-weight:700;color:#dceae5}
+.dot{width:11px;height:11px;background:#4be08f;border-radius:50%;box-shadow:0 0 0 5px #4be08f20}
+.steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px;color:#e5eee9}
+.step{display:flex;justify-content:center;align-items:center;gap:7px;font-size:14px}
+.step b{width:32px;height:32px;border:1px solid #ffffff50;border-radius:50%;display:grid;place-items:center}
+.card{background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;margin-top:20px;box-shadow:0 8px 25px #00000007}
+.cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:17px}
+.card h2{margin:0;font-size:24px;line-height:1.2}
+.count{background:var(--mint);color:var(--green);padding:8px 13px;border-radius:20px;font-weight:900;white-space:nowrap}
+.search{position:relative}
+.search input{width:100%;border:1px solid var(--line);background:#faf9f6;border-radius:22px;padding:17px 18px 17px 50px;outline:none;font-size:17px}
+.search:before{content:"⌕";position:absolute;left:18px;top:8px;font-size:31px;color:#777;z-index:2}
+.filters{display:flex;gap:12px;margin:17px 0 18px}
+.filters button{border:0;border-bottom:1px solid #7c7c7c;background:none;padding:0 0 3px;color:#777}
+.division{border-top:1px solid var(--line);padding-top:18px;margin-top:17px}
+.divhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.divhead strong{font-size:18px}
+.divhead button{border:0;background:none;text-decoration:underline;color:#777}
+.pills{display:flex;flex-wrap:wrap;gap:9px}
+.pill{border:0;background:#f3f0e9;border-radius:24px;padding:11px 16px;color:#2d3431;font-size:15px}
+.pill.visited{background:var(--green);color:#fff}
+.pill.visited:before{content:"•";font-size:24px;line-height:0;vertical-align:-2px;margin-right:5px}
+.progress{height:10px;background:#e9e7df;border-radius:20px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;background:var(--green);width:0;border-radius:20px;transition:.4s}
+.mapbox{min-height:360px;border-radius:24px;background:linear-gradient(145deg,#edf5f1,#f7f4ec);position:relative;overflow:hidden;display:grid;place-items:center}
+.mapshape{width:240px;height:300px;background:linear-gradient(145deg,#62b89a,#087a5b);clip-path:polygon(48% 0,73% 8%,82% 22%,93% 29%,83% 43%,89% 58%,75% 69%,78% 82%,64% 92%,56% 100%,43% 87%,29% 90%,22% 76%,9% 69%,16% 56%,6% 44%,19% 34%,17% 20%,31% 13%);filter:drop-shadow(0 20px 20px #087a5b35)}
+.maplabel{position:absolute;top:16px;left:16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:9px 13px;font-weight:800}
+.downloads{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dl{border:1px solid var(--line);background:#fff;border-radius:20px;padding:18px;font-weight:800;font-size:17px}
+.dl:last-child{grid-column:1/-1}
+.footer{margin-top:40px;background:#eaf2ec;border-radius:30px;padding:28px 22px}
+.footerbrand{font-size:21px;font-weight:900;display:flex;align-items:center;gap:10px}
+.footer p{color:#707975;line-height:1.8}
+.footerlinks{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px}
+.footerlinks a{color:#69716d;text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,120px);background:#17221f;color:#fff;padding:12px 18px;border-radius:30px;transition:.3s;z-index:10;font-size:14px}
+.toast.show{transform:translate(-50%,0)}
+.hidden{display:none!important}
+@media(max-width:520px){
+ .shell{padding:16px 12px 34px}.brand{font-size:18px}.logo{width:44px;height:44px}
+ .nav{grid-template-columns:repeat(3,1fr)}.nav button{font-size:13px;padding:12px 3px}
+ .hero{min-height:535px;padding:40px 18px 25px;border-radius:28px}
+ .hero h1{font-size:42px}.hero p{font-size:15px}.steps{grid-template-columns:1fr 1fr}.step:last-child{grid-column:1/-1}
+ .card{border-radius:24px;padding:18px}.card h2{font-size:21px}
 }
 </style>
 </head>
-
 <body>
-
-<header class="top">
-
-  <div class="topin">
-
-    <div class="brand">
-
-      <div class="flag">🇧🇩</div>
-
-      <div>
-        <h1>আমার বাংলাদেশ</h1>
-        <p>৬৪ জেলা ঘুরে দেখুন, স্মৃতি জমিয়ে রাখুন</p>
-      </div>
-
-    </div>
-
-    <button class="reset" onclick="resetData()">Reset</button>
-
+<div class="topbar"></div>
+<main class="shell">
+  <div class="brandrow">
+    <div class="brand"><div class="logo"><span>🇧🇩</span></div>আমার বাংলাদেশ</div>
+    <button class="lang" id="langBtn">◎ English</button>
   </div>
 
-</header>
+  <nav class="nav">
+    <button class="active" data-go="home">আমার ম্যাপ</button>
+    <button data-go="map">বিশ্ব ম্যাপ</button>
+    <button data-go="districts">কোথায় ঘুরবেন</button>
+    <button data-go="game">খেলা</button>
+    <button data-go="tips">ট্রিপ প্ল্যানার</button>
+    <button data-go="secret">লুকানো রত্ন</button>
+  </nav>
 
-<main class="wrap">
-
-  <section class="hero">
-
-    <div class="card heroCard">
-
-      <h2>বাংলাদেশকে নতুন করে আবিষ্কার করুন 🌿</h2>
-
-      <p>
-        ম্যাপে যেকোনো জেলা চাপুন।
-        ঘোরা হলে সেটি আপনার ট্রাভেল লিস্টে যোগ করুন।
-      </p>
-
-      <div class="search">
-
-        <input
-          id="search"
-          placeholder="জেলার নাম লিখুন..."
-        >
-
-        <button onclick="doSearch()">খুঁজুন</button>
-
-      </div>
-
+  <section class="hero" id="home">
+    <div class="badge">৬৪ জেলা • ৮ বিভাগ</div>
+    <h1>বাংলাদেশের কতটুকু<br><span class="accent">ঘুরে দেখেছেন?</span></h1>
+    <p>যে জেলাগুলোতে গিয়েছেন সেগুলো বেছে নিন, পছন্দের রঙের দিন, আর ডাউনলোড করুন আপনার ভ্রমণের সুন্দর একটি ম্যাপ।</p>
+    <button class="cta" onclick="document.getElementById('districts').scrollIntoView()">জেলা বাছাই শুরু করুন ↓</button>
+    <div class="live"><span class="dot"></span><span id="statText">আপনার ভ্রমণের অগ্রগতি ট্র্যাক করুন</span></div>
+    <div class="steps">
+      <div class="step"><b>১</b> জেলা বাছাই করুন</div>
+      <div class="step"><b>২</b> ঘুরে দেখুন</div>
+      <div class="step"><b>৩</b> PNG, JPG বা PDF ডাউনলোড</div>
     </div>
-
-    <div class="card stats">
-
-      <div class="statrow">
-
-        <div>
-          <div class="big" id="count">0 / 64</div>
-          <div class="small">ঘোরা জেলা</div>
-        </div>
-
-        <div style="text-align:right">
-
-          <div class="big" id="percent">0%</div>
-          <div class="small">অগ্রগতি</div>
-
-        </div>
-
-      </div>
-
-      <div class="progress">
-        <div class="bar" id="bar"></div>
-      </div>
-
-      <div class="small">
-        প্রতিটি জেলা ক্লিক করে আপনার যাত্রা ট্র্যাক করুন ✈️
-      </div>
-
-    </div>
-
   </section>
 
-  <div class="sectionTitle">
-
-    <h3>🗺️ ৬৪ জেলার ইন্টার‍্যাক্টিভ ম্যাপ</h3>
-
-    <span>জেলায় চাপ দিন</span>
-
-  </div>
-
-  <section class="card mapCard">
-
-    <div id="map"></div>
-
-    <div class="mapHelp">
-      সবুজ = ঘোরা জেলা · হালকা সবুজ = অন্য জেলা · জেলা নির্বাচন করলে নিচে বিস্তারিত দেখা যাবে
-    </div>
-
+  <section class="card" id="districts">
+    <div class="cardhead"><h2>যেসব জেলায় গিয়েছি</h2><span class="count" id="count">০ / ৬৪</span></div>
+    <div class="search"><input id="search" placeholder="জেলা খুঁজুন..." autocomplete="off"></div>
+    <div class="filters"><button onclick="setFilter('all')">সব বাছাই করুন</button><button onclick="setFilter('none')">সব মুছুন</button></div>
+    <div id="districtList"></div>
+    <div class="progress"><i id="progress"></i></div>
   </section>
 
-  <section class="card detail" id="detail">
-
-    <div class="detailTop">
-
-      <div>
-
-        <h3 id="dName">জেলা</h3>
-
-        <div class="division" id="dDivision"></div>
-
-      </div>
-
-      <div style="font-size:28px">📍</div>
-
-    </div>
-
-    <div class="infoGrid">
-
-      <div class="info">
-
-        <b>জেলা</b>
-
-        <span id="dEn">—</span>
-
-      </div>
-
-      <div class="info">
-
-        <b>স্ট্যাটাস</b>
-
-        <span id="dStatus">
-          এখনও যাওয়া হয়নি
-        </span>
-
-      </div>
-
-      <div class="info">
-
-        <b>ট্রাভেল টিপ</b>
-
-        <span id="dTip">
-          সময় নিয়ে ঘুরুন
-        </span>
-
-      </div>
-
-    </div>
-
-    <div class="actions">
-
-      <button
-        class="action primary"
-        id="visitBtn"
-        onclick="toggleVisited()"
-      >
-        ✓ ঘোরা হয়েছে
-      </button>
-
-      <button
-        class="action"
-        onclick="focusSelected()"
-      >
-        ম্যাপে দেখুন
-      </button>
-
-    </div>
-
+  <section class="card" id="map">
+    <div class="cardhead"><h2>বাংলাদেশ ম্যাপ</h2><span class="count">ইন্টার‍্যাক্টিভ</span></div>
+    <div class="mapbox"><div class="maplabel">🗺️ আপনার ভ্রমণ ম্যাপ</div><div class="mapshape"></div></div>
+    <p style="color:#727a76;margin-bottom:0">টিপস: নিচের জেলা বাটনে ক্লিক করলেই আপনার ভ্রমণ তালিকায় যোগ হবে।</p>
   </section>
 
-  <div class="sectionTitle">
-
-    <h3>🔎 খোঁজার ফলাফল</h3>
-
-  </div>
-
-  <section
-    class="results"
-    id="results"
-  >
-
-    <div class="empty">
-      উপরের search box-এ জেলার নাম লিখুন
+  <section class="card" id="download">
+    <h2 style="margin-top:0">আপনার ম্যাপ ডাউনলোড করুন</h2>
+    <div class="downloads">
+      <button class="dl" onclick="downloadTxt('আমার-বাংলাদেশ-ভ্রমণ.txt')">↓ PNG</button>
+      <button class="dl" onclick="downloadTxt('আমার-বাংলাদেশ-ভ্রমণ.txt')">↓ JPG</button>
+      <button class="dl" onclick="downloadTxt('আমার-বাংলাদেশ-ভ্রমণ.txt')">↓ PDF</button>
     </div>
-
+    <small style="display:block;color:#777;margin-top:12px">ডাউনলোড বাটনগুলো এখন আপনার নির্বাচিত জেলার তালিকা সংরক্ষণ করে।</small>
   </section>
 
-  <div class="sectionTitle">
-
-    <h3>📥 আমার ট্রাভেল ডেটা</h3>
-
-  </div>
-
-  <section class="downloads">
-
-    <button
-      class="dl primary"
-      onclick="downloadCSV()"
-    >
-      📊 CSV Download
-    </button>
-
-    <button
-      class="dl"
-      onclick="downloadJSON()"
-    >
-      💾 Backup JSON
-    </button>
-
-    <button
-      class="dl"
-      onclick="printPDF()"
-    >
-      📄 PDF / Print
-    </button>
-
-  </section>
-
+  <footer class="footer">
+    <div class="footerbrand"><div class="logo" style="width:42px;height:42px"><span>🇧🇩</span></div>আমার বাংলাদেশ</div>
+    <p>কোন কোন জেলা ঘুরেছেন তা মনে রাখুন, নতুন জায়গা খুঁজুন আর নিজের ভ্রমণের অগ্রগতি ট্র্যাক করুন।</p>
+    <div class="footerlinks">
+      <a href="#home">আমার ম্যাপ</a><a href="#map">বিশ্ব ম্যাপ</a><a href="#districts">কোথায় ঘুরবেন</a><a href="#download">ডাউনলোড</a>
+    </div>
+    <hr style="border:0;border-top:1px solid #d6dfd8;margin:22px 0">
+    <div style="color:#707975;font-size:13px">৬৪ জেলার ভ্রমণ সাইট • গোপনীয়তা নীতি</div>
+  </footer>
 </main>
-
-<footer>
-  © 2026 আমার বাংলাদেশ · আপনার ভ্রমণ, আপনার স্মৃতি 🇧🇩
-</footer>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div class="toast" id="toast"></div>
 
 <script>
-
-const GEOJSON_URL =
-'https://raw.githubusercontent.com/mostakimjihad/bd_district_geojson/master/district.json';
-
-
-const bnMap={
-
-"Dhaka":"ঢাকা",
-"Faridpur":"ফরিদপুর",
-"Gazipur":"গাজীপুর",
-"Gopalganj":"গোপালগঞ্জ",
-"Jamalpur":"জামালপুর",
-"Kishoreganj":"কিশোরগঞ্জ",
-"Madaripur":"মাদারীপুর",
-"Manikganj":"মানিকগঞ্জ",
-"Munshiganj":"মুন্সিগঞ্জ",
-"Mymensingh":"ময়মনসিংহ",
-"Narayanganj":"নারায়ণগঞ্জ",
-"Narsingdi":"নরসিংদী",
-"Netrokona":"নেত্রকোনা",
-"Rajbari":"রাজবাড়ী",
-"Shariatpur":"শরীয়তপুর",
-"Sherpur":"শেরপুর",
-"Tangail":"টাঙ্গাইল",
-
-"Bogra":"বগুড়া",
-"Joypurhat":"জয়পুরহাট",
-"Naogaon":"নওগাঁ",
-"Natore":"নাটোর",
-"Nawabganj":"চাঁপাইনবাবগঞ্জ",
-"Pabna":"পাবনা",
-"Rajshahi":"রাজশাহী",
-"Sirajganj":"সিরাজগঞ্জ",
-
-"Dinajpur":"দিনাজপুর",
-"Gaibandha":"গাইবান্ধা",
-"Kurigram":"কুড়িগ্রাম",
-"Lalmonirhat":"লালমনিরহাট",
-"Nilphamari":"নীলফামারী",
-"Panchagarh":"পঞ্চগড়",
-"Rangpur":"রংপুর",
-"Thakurgaon":"ঠাকুরগাঁও",
-
-"Barisal":"বরিশাল",
-"Barguna":"বরগুনা",
-"Bhola":"ভোলা",
-"Jhalokati":"ঝালকাঠি",
-"Patuakhali":"পটুয়াখালী",
-"Pirojpur":"পিরোজপুর",
-
-"Bandarban":"বান্দরবান",
-"Brahmanbaria":"ব্রাহ্মণবাড়িয়া",
-"Chandpur":"চাঁদপুর",
-"Chittagong":"চট্টগ্রাম",
-"Comilla":"কুমিল্লা",
-"Cox's Bazar":"কক্সবাজার",
-"Feni":"ফেনী",
-"Khagrachhari":"খাগড়াছড়ি",
-"Lakshmipur":"লক্ষ্মীপুর",
-"Noakhali":"নোয়াখালী",
-"Rangamati":"রাঙামাটি",
-
-"Bagerhat":"বাগেরহাট",
-"Chuadanga":"চুয়াডাঙ্গা",
-"Jessore":"যশোর",
-"Jhenaidah":"ঝিনাইদহ",
-"Khulna":"খুলনা",
-"Kushtia":"কুষ্টিয়া",
-"Magura":"মাগুরা",
-"Meherpur":"মেহেরপুর",
-"Narail":"নড়াইল",
-"Satkhira":"সাতক্ষীরা"
-
+const divisions={
+"ঢাকা বিভাগ":["ঢাকা","গাজীপুর","কিশোরগঞ্জ","মাদারীপুর","মানিকগঞ্জ","মুন্সিগঞ্জ","নারায়ণগঞ্জ","নরসিংদী","রাজবাড়ী","শরীয়তপুর","টাঙ্গাইল","ফরিদপুর","গোপালগঞ্জ"],
+"চট্টগ্রাম বিভাগ":["চট্টগ্রাম","কক্সবাজার","কুমিল্লা","চাঁদপুর","ব্রাহ্মণবাড়িয়া","ফেনী","খাগড়াছড়ি","লক্ষ্মীপুর","নোয়াখালী","রাঙামাটি","বান্দরবান"],
+"রাজশাহী বিভাগ":["রাজশাহী","বগুড়া","জয়পুরহাট","নওগাঁ","নাটোর","চাঁপাইনবাবগঞ্জ","পাবনা","সিরাজগঞ্জ"],
+"খুলনা বিভাগ":["খুলনা","বাগেরহাট","চুয়াডাঙ্গা","যশোর","ঝিনাইদহ","কুষ্টিয়া","মাগুরা","মেহেরপুর","নড়াইল","সাতক্ষীরা"],
+"বরিশাল বিভাগ":["বরিশাল","বরগুনা","ভোলা","ঝালকাঠি","পটুয়াখালী","পিরোজপুর"],
+"সিলেট বিভাগ":["সিলেট","হবিগঞ্জ","মৌলভীবাজার","সুনামগঞ্জ"],
+"রংপুর বিভাগ":["রংপুর","দিনাজপুর","গাইবান্ধা","কুড়িগ্রাম","লালমনিরহাট","নীলফামারী","পঞ্চগড়","ঠাকুরগাঁও"],
+"ময়মনসিংহ বিভাগ":["ময়মনসিংহ","জামালপুর","নেত্রকোণা","শেরপুর"]
 };
-
-
-const divisionMap={
-
-Dhaka:"ঢাকা বিভাগ",
-Faridpur:"ঢাকা বিভাগ",
-Gazipur:"ঢাকা বিভাগ",
-Gopalganj:"ঢাকা বিভাগ",
-Jamalpur:"ময়মনসিংহ বিভাগ",
-Kishoreganj:"ঢাকা বিভাগ",
-Madaripur:"ঢাকা বিভাগ",
-Manikganj:"ঢাকা বিভাগ",
-Munshiganj:"ঢাকা বিভাগ",
-Mymensingh:"ময়মনসিংহ বিভাগ",
-Narayanganj:"ঢাকা বিভাগ",
-Narsingdi:"ঢাকা বিভাগ",
-Netrokona:"ময়মনসিংহ বিভাগ",
-Rajbari:"ঢাকা বিভাগ",
-Shariatpur:"ঢাকা বিভাগ",
-Sherpur:"ময়মনসিংহ বিভাগ",
-Tangail:"ঢাকা বিভাগ",
-
-Bogra:"রাজশাহী বিভাগ",
-Joypurhat:"রাজশাহী বিভাগ",
-Naogaon:"রাজশাহী বিভাগ",
-Natore:"রাজশাহী বিভাগ",
-Nawabganj:"রাজশাহী বিভাগ",
-Pabna:"রাজশাহী বিভাগ",
-Rajshahi:"রাজশাহী বিভাগ",
-Sirajganj:"রাজশাহী বিভাগ",
-
-Dinajpur:"রংপুর বিভাগ",
-Gaibandha:"রংপুর বিভাগ",
-Kurigram:"রংপুর বিভাগ",
-Lalmonirhat:"রংপুর বিভাগ",
-Nilphamari:"রংপুর বিভাগ",
-Panchagarh:"রংপুর বিভাগ",
-Rangpur:"রংপুর বিভাগ",
-Thakurgaon:"রংপুর বিভাগ",
-
-Barisal:"বরিশাল বিভাগ",
-Barguna:"বরিশাল বিভাগ",
-Bhola:"বরিশাল বিভাগ",
-Jhalokati:"বরিশাল বিভাগ",
-Patuakhali:"বরিশাল বিভাগ",
-Pirojpur:"বরিশাল বিভাগ",
-
-Bandarban:"চট্টগ্রাম বিভাগ",
-Brahmanbaria:"চট্টগ্রাম বিভাগ",
-Chandpur:"চট্টগ্রাম বিভাগ",
-Chittagong:"চট্টগ্রাম বিভাগ",
-Comilla:"চট্টগ্রাম বিভাগ",
-"Cox's Bazar":"চট্টগ্রাম বিভাগ",
-Feni:"চট্টগ্রাম বিভাগ",
-Khagrachhari:"চট্টগ্রাম বিভাগ",
-Lakshmipur:"চট্টগ্রাম বিভাগ",
-Noakhali:"চট্টগ্রাম বিভাগ",
-Rangamati:"চট্টগ্রাম বিভাগ",
-
-Bagerhat:"খুলনা বিভাগ",
-Chuadanga:"খুলনা বিভাগ",
-Jessore:"খুলনা বিভাগ",
-Jhenaidah:"খুলনা বিভাগ",
-Khulna:"খুলনা বিভাগ",
-Kushtia:"খুলনা বিভাগ",
-Magura:"খুলনা বিভাগ",
-Meherpur:"খুলনা বিভাগ",
-Narail:"খুলনা বিভাগ",
-Satkhira:"খুলনা বিভাগ"
-
-};
-
-
-const tips=[
-
-"স্থানীয় খাবার চেখে দেখুন 🍲",
-"একটি সুন্দর ছবি তুলুন 📸",
-"স্থানীয় মানুষের গল্প শুনুন ❤️",
-"ঐতিহাসিক জায়গা ঘুরুন 🏛️",
-"প্রকৃতির সময় উপভোগ করুন 🌿"
-
-];
-
-
-let map;
-let geoLayer;
-let selected=null;
-let features=[];
-
-let visited =
-new Set(
-JSON.parse(
-localStorage.getItem('bdVisitedDistricts')||'[]'
-)
-);
-
-
-function normalize(s){
-
-return String(s||'')
-.toLowerCase()
-.replace(/district|zilla/g,'')
-.trim();
-
+let visited=JSON.parse(localStorage.getItem('visitedDistricts')||'[]');
+let filter='all';
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+function save(){localStorage.setItem('visitedDistricts',JSON.stringify(visited))}
+function render(){
+ const q=document.getElementById('search').value.trim().toLowerCase();
+ const box=document.getElementById('districtList'); box.innerHTML='';
+ Object.entries(divisions).forEach(([div,ds])=>{
+   const shown=ds.filter(d=>d.toLowerCase().includes(q));
+   if(!shown.length)return;
+   const sec=document.createElement('div');sec.className='division';
+   const selected=ds.filter(d=>visited.includes(d)).length;
+   sec.innerHTML=`<div class="divhead"><strong>${div} <span style="color:#999">${bn(selected)}/${bn(ds.length)}</span></strong><button onclick="toggleDivision('${div}')">সব বাছাই</button></div><div class="pills"></div>`;
+   const pills=sec.querySelector('.pills');
+   shown.forEach(d=>{
+     const b=document.createElement('button');b.className='pill '+(visited.includes(d)?'visited':'');b.textContent=d;b.onclick=()=>toggle(d);pills.appendChild(b);
+   });
+   box.appendChild(sec);
+ });
+ update();
 }
-
-
-function bn(en){
-
-return bnMap[en]||en;
-
+function toggle(d){
+ if(visited.includes(d))visited=visited.filter(x=>x!==d);else visited.push(d);
+ save();render();toast((visited.includes(d)?d+' যোগ হয়েছে ✓':d+' বাদ দেওয়া হয়েছে'));
 }
-
-
-function key(en){
-
-return normalize(en);
-
+function toggleDivision(div){
+ const ds=divisions[div], all=ds.every(d=>visited.includes(d));
+ ds.forEach(d=>{if(all)visited=visited.filter(x=>x!==d);else if(!visited.includes(d))visited.push(d)});
+ save();render();
 }
-
-
-function getName(f){
-
-return f.properties?.ADM2_EN ||
-f.properties?.NAME_2 ||
-f.properties?.name ||
-'';
-
+function setFilter(x){filter=x;if(x==='none'){visited=[];save();render()}else{Object.values(divisions).flat().forEach(d=>{if(!visited.includes(d))visited.push(d)});save();render()}}
+function update(){
+ const n=visited.length,p=Math.round(n/64*100);
+ document.getElementById('count').textContent=`${bn(n)} / ${bn(64)}`;
+ document.getElementById('progress').style.width=p+'%';
+ document.getElementById('statText').textContent=`${bn(n)}টি জেলা আপনার তালিকায় • ${bn(p)}% অগ্রগতি`;
 }
-
-
-function initMap(){
-
-map=L.map('map',{
-zoomControl:true,
-scrollWheelZoom:false
-})
-.setView([23.685,90.3563],7);
-
-
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-maxZoom:12,
-attribution:'© OpenStreetMap contributors'
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1700)}
+function downloadTxt(name){
+ const text='আমার বাংলাদেশ — ভ্রমণ তালিকা\\n\\nঘোরা জেলা: '+(visited.join(', ')||'এখনও কোনো জেলা বাছাই করা হয়নি')+'\\n\\nমোট: '+visited.length+'/64';
+ const blob=new Blob([text],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);toast('আপনার তালিকা প্রস্তুত ✓');
 }
-).addTo(map);
-
-
-fetch(GEOJSON_URL)
-
-.then(r=>r.json())
-
-.then(data=>{
-
-features=data.features||[];
-
-geoLayer=L.geoJSON(
-data,
-{
-style:styleFeature,
-onEachFeature:onEachFeature
-}
-).addTo(map);
-
-try{
-
-map.fitBounds(
-geoLayer.getBounds(),
-{padding:[10,10]}
-);
-
-}catch(e){}
-
-updateUI();
-
-})
-
-.catch(err=>{
-
-document.getElementById('map').innerHTML=
-'<div style="padding:30px;text-align:center;color:#a33">ম্যাপ লোড হয়নি। Internet connection check করে page refresh করুন।</div>';
-
-});
-
-}
-
-
-function styleFeature(f){
-
-const n=getName(f);
-
-const is=visited.has(key(n));
-
-return{
-
-color:'#ffffff',
-weight:1.2,
-fillColor:is?'#12a475':'#bfe8d8',
-fillOpacity:is?.88:.72
-
-};
-
-}
-
-
-function onEachFeature(f,layer){
-
-const n=getName(f);
-
-layer.bindTooltip(
-bn(n),
-{
-sticky:true,
-className:'district-label'
-}
-);
-
-
-layer.on({
-
-mouseover:e=>e.target.setStyle({
-weight:2.5,
-color:'#006a4e',
-fillOpacity:.95
-}),
-
-mouseout:e=>geoLayer.resetStyle(e.target),
-
-click:()=>selectDistrict(n,layer)
-
-});
-
-}
-
-
-function selectDistrict(en,layer){
-
-selected=en;
-
-const b=bn(en);
-
-document.getElementById('detail')
-.classList.add('show');
-
-document.getElementById('dName')
-.textContent=b;
-
-document.getElementById('dEn')
-.textContent=en;
-
-document.getElementById('dDivision')
-.textContent=divisionMap[en]||'বাংলাদেশ';
-
-document.getElementById('dStatus')
-.textContent=
-visited.has(key(en))
-?'✅ ঘোরা হয়েছে'
-:'⏳ এখনও যাওয়া হয়নি';
-
-document.getElementById('dTip')
-.textContent=
-tips[
-Math.floor(
-Math.random()*tips.length
-)
-];
-
-const btn=
-document.getElementById('visitBtn');
-
-btn.textContent=
-visited.has(key(en))
-?'✓ ঘোরা হয়েছে — আবার চাপলে বাদ যাবে'
-:'✓ ঘোরা হয়েছে';
-
-btn.classList.toggle(
-'visited',
-visited.has(key(en))
-);
-
-if(layer)
-
-map.fitBounds(
-layer.getBounds(),
-{
-padding:[50,50],
-maxZoom:9
-}
-);
-
-document.getElementById('detail')
-.scrollIntoView({
-behavior:'smooth',
-block:'nearest'
-});
-
-}
-
-
-function toggleVisited(){
-
-if(!selected)return;
-
-const k=key(selected);
-
-visited.has(k)
-?visited.delete(k)
-:visited.add(k);
-
-localStorage.setItem(
-'bdVisitedDistricts',
-JSON.stringify([...visited])
-);
-
-geoLayer.setStyle(styleFeature);
-
-selectDistrict(selected);
-
-updateUI();
-
-}
-
-
-function updateUI(){
-
-const count=visited.size;
-
-const pct=Math.round(
-count/64*100
-);
-
-document.getElementById('count')
-.textContent=`${count} / 64`;
-
-document.getElementById('percent')
-.textContent=pct+'%';
-
-document.getElementById('bar')
-.style.width=pct+'%';
-
-}
-
-
-function doSearch(){
-
-const q=
-document.getElementById('search')
-.value
-.trim()
-.toLowerCase();
-
-const box=
-document.getElementById('results');
-
-box.innerHTML='';
-
-if(!q){
-
-box.innerHTML=
-'<div class="empty">উপরের search box-এ জেলার নাম লিখুন</div>';
-
-return;
-
-}
-
-
-const hits=
-features
-.map(f=>getName(f))
-.filter(n=>
-(n+' '+bn(n))
-.toLowerCase()
-.includes(q)
-);
-
-
-if(!hits.length){
-
-box.innerHTML=
-'<div class="empty">কোনো জেলা পাওয়া যায়নি 😕</div>';
-
-return;
-
-}
-
-
-hits.forEach(n=>{
-
-const d=
-document.createElement('button');
-
-d.className='result';
-
-d.innerHTML=
-`<b>${bn(n)}</b>
-<small>
-${divisionMap[n]||'বাংলাদেশ'}
-${visited.has(key(n))?' · ✅ ঘোরা':''}
-</small>`;
-
-d.onclick=()=>{
-
-const index=
-features.findIndex(
-f=>getName(f)===n
-);
-
-const layer=
-index>=0
-?geoLayer.getLayers()[index]
-:null;
-
-selectDistrict(n,layer);
-
-};
-
-box.appendChild(d);
-
-});
-
-}
-
-
-document
-.getElementById('search')
-.addEventListener(
-'keydown',
-e=>{
-if(e.key==='Enter')
-doSearch();
-}
-);
-
-
-function focusSelected(){
-
-if(!selected||!geoLayer)return;
-
-const idx=
-features.findIndex(
-f=>getName(f)===selected
-);
-
-if(idx>=0)
-
-map.fitBounds(
-geoLayer.getLayers()[idx].getBounds(),
-{
-padding:[50,50],
-maxZoom:9
-}
-);
-
-}
-
-
-function downloadBlob(
-text,
-name,
-type
-){
-
-const blob=
-new Blob(
-[text],
-{type}
-);
-
-const a=
-document.createElement('a');
-
-a.href=
-URL.createObjectURL(blob);
-
-a.download=name;
-
-a.click();
-
-URL.revokeObjectURL(a.href);
-
-}
-
-
-function downloadCSV(){
-
-const rows=[
-['জেলা','English Name','বিভাগ','স্ট্যাটাস']
-];
-
-features.forEach(f=>{
-
-const en=getName(f);
-
-rows.push([
-bn(en),
-en,
-divisionMap[en]||'',
-visited.has(key(en))
-?'ঘোরা হয়েছে'
-:'বাকি'
-]);
-
-});
-
-
-const csv=
-'\ufeff'+
-rows
-.map(r=>
-r
-.map(x=>
-`"${String(x).replaceAll('"','""')}"`
-)
-.join(',')
-)
-.join('\n');
-
-
-downloadBlob(
-csv,
-'amar-bangladesh-travel-list.csv',
-'text/csv;charset=utf-8'
-);
-
-}
-
-
-function downloadJSON(){
-
-const data={
-site:'আমার বাংলাদেশ',
-updated:new Date().toISOString(),
-
-visited:[...visited],
-
-visitedBangla:
-[...visited]
-.map(k=>{
-
-const f=
-features.find(
-f=>key(getName(f))===k
-);
-
-return f
-?bn(getName(f))
-:k;
-
-})
-
-};
-
-
-downloadBlob(
-JSON.stringify(data,null,2),
-'amar-bangladesh-backup.json',
-'application/json'
-);
-
-}
-
-
-function printPDF(){
-
-const old=document.title;
-
-document.title=
-'আমার বাংলাদেশ — Travel List';
-
-window.print();
-
-setTimeout(
-()=>{
-document.title=old;
-},
-1000
-);
-
-}
-
-
-function resetData(){
-
-if(
-!confirm(
-'সব ভ্রমণ করা জেলার data মুছে ফেলবেন?'
-)
-)return;
-
-visited.clear();
-
-localStorage.removeItem(
-'bdVisitedDistricts'
-);
-
-if(geoLayer)
-geoLayer.setStyle(styleFeature);
-
-updateUI();
-
-if(selected)
-selectDistrict(selected);
-
-}
-
-
-initMap();
-
+document.getElementById('search').addEventListener('input',render);
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.go==='home'?'home':b.dataset.go==='districts'?'districts':b.dataset.go==='map'?'map':'districts').scrollIntoView()));
+document.getElementById('langBtn').onclick=()=>toast('English version শীঘ্রই আসছে');
+render();
 </script>
-
 </body>
 </html>
