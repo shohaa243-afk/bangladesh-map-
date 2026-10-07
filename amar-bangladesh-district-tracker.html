@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>আমার বাংলাদেশ — District Tracker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#17221c}
+header{background:#0b6b3a;color:white;text-align:center;padding:28px 15px}
+header h1{margin:0 0 8px;font-size:30px}header p{margin:0;opacity:.9}
+.wrap{max-width:1050px;margin:25px auto;padding:0 15px}
+.card{background:white;border-radius:18px;padding:20px;box-shadow:0 5px 22px #00000012;margin-bottom:20px}
+.stats{display:flex;gap:12px;flex-wrap:wrap}.stat{flex:1;min-width:150px;background:#eef7f1;border-radius:14px;padding:16px;text-align:center}
+.stat b{display:block;font-size:25px;margin-bottom:5px}.bar{height:12px;background:#e4e9e6;border-radius:20px;overflow:hidden;margin-top:10px}.fill{height:100%;width:0;background:#0b6b3a;transition:.25s}
+.search{width:100%;padding:13px 15px;border:1px solid #d5ddd8;border-radius:12px;font-size:16px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-top:16px}
+.district{border:0;border-radius:12px;padding:14px 8px;background:#f0f3f1;cursor:pointer;font-size:15px;transition:.2s}
+.district:hover{transform:translateY(-2px)}.district.visited{background:#0b6b3a;color:white}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+button.action{border:0;border-radius:10px;padding:11px 15px;cursor:pointer;font-size:15px}
+.reset{background:#eee;color:#222}.download{background:#17221c;color:white}
+#message{text-align:center;margin-top:12px;color:#0b6b3a;font-weight:bold}
+small{display:block;margin-top:18px;color:#65706a}
+</style>
+</head>
+<body>
+<header><h1>🇧🇩 আমার বাংলাদেশ</h1><p>৬৪ জেলা ঘোরার নিজের ট্র্যাকার</p></header>
+<div class="wrap">
+<section class="card">
+<div class="stats">
+<div class="stat"><b id="count">0 / 64</b>ঘোরা জেলা</div>
+<div class="stat"><b id="percent">0%</b>অগ্রগতি</div>
+</div>
+<div class="bar"><div class="fill" id="fill"></div></div>
+</section>
+
+<section class="card">
+<input class="search" id="search" placeholder="জেলার নাম লিখে খুঁজুন...">
+<div class="grid" id="grid"></div>
+<div id="message"></div>
+<div class="actions">
+<button class="action reset" onclick="resetAll()">সব Reset</button>
+<button class="action download" onclick="downloadData()">আমার তালিকা Download</button>
+</div>
+<small>জেলার ওপর চাপ দিলে সেটি ঘোরা/visited হিসেবে চিহ্নিত হবে। তথ্য আপনার ব্রাউজারেই সংরক্ষিত থাকবে।</small>
+</section>
+</div>
+
+<script>
+const districts=[
+"ঢাকা","গাজীপুর","নারায়ণগঞ্জ","নরসিংদী","টাঙ্গাইল","কিশোরগঞ্জ","মানিকগঞ্জ","মুন্সিগঞ্জ","ফরিদপুর","গোপালগঞ্জ","মাদারীপুর","রাজবাড়ী","শরীয়তপুর",
+"চট্টগ্রাম","কক্সবাজার","কুমিল্লা","ব্রাহ্মণবাড়িয়া","চাঁদপুর","ফেনী","নোয়াখালী","লক্ষ্মীপুর","খাগড়াছড়ি","রাঙামাটি","বান্দরবান",
+"রাজশাহী","নাটোর","নওগাঁ","চাঁপাইনবাবগঞ্জ","পাবনা","সিরাজগঞ্জ","বগুড়া","জয়পুরহাট",
+"খুলনা","যশোর","সাতক্ষীরা","বাগেরহাট","ঝিনাইদহ","মাগুরা","নড়াইল","কুষ্টিয়া","চুয়াডাঙ্গা","মেহেরপুর",
+"বরিশাল","ভোলা","পটুয়াখালী","পিরোজপুর","বরগুনা","ঝালকাঠি",
+"সিলেট","মৌলভীবাজার","হবিগঞ্জ","সুনামগঞ্জ",
+"রংপুর","দিনাজপুর","ঠাকুরগাঁও","পঞ্চগড়","নীলফামারী","লালমনিরহাট","কুড়িগ্রাম","গাইবান্ধা",
+"ময়মনসিংহ","জামালপুর","শেরপুর","নেত্রকোণা"
+];
+
+let visited=JSON.parse(localStorage.getItem("visitedDistricts")||"[]");
+
+function render(){
+ const q=document.getElementById("search").value.trim();
+ const grid=document.getElementById("grid"); grid.innerHTML="";
+ districts.filter(d=>d.includes(q)).forEach(d=>{
+   const b=document.createElement("button");
+   b.className="district"+(visited.includes(d)?" visited":"");
+   b.textContent=(visited.includes(d)?"✓ ":"")+d;
+   b.onclick=()=>toggle(d);
+   grid.appendChild(b);
+ });
+ const n=visited.length, p=Math.round(n/64*100);
+ document.getElementById("count").textContent=`${n} / 64`;
+ document.getElementById("percent").textContent=p+"%";
+ document.getElementById("fill").style.width=p+"%";
+}
+function toggle(d){
+ if(visited.includes(d)) visited=visited.filter(x=>x!==d);
+ else visited.push(d);
+ localStorage.setItem("visitedDistricts",JSON.stringify(visited));
+ document.getElementById("message").textContent=d+(visited.includes(d)?" — visited ✅":" — তালিকা থেকে বাদ দেওয়া হয়েছে");
+ render();
+}
+function resetAll(){
+ if(confirm("সব visited জেলা মুছে ফেলবেন?")){
+   visited=[];localStorage.removeItem("visitedDistricts");render();
+ }
+}
+function downloadData(){
+ const text="আমার ঘোরা জেলা\\n\\n"+visited.map((x,i)=>(i+1)+". "+x).join("\\n");
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([text],{type:"text/plain;charset=utf-8"}));
+ a.download="amar-bangladesh-districts.txt";a.click();
+}
+document.getElementById("search").addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
